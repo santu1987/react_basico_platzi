@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <main id="app"></main>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.18.2/babel.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+  <script type="text/babel">
+   //--FORMAS DE CREAR UN COMPONENTE:
+   //-1)Con funciones nativas de javascript 
+    function Hola(props) {
+      const name = props.name;
+
+      return (
+        <h1 id="Title">
+          Hola {name}
+        </h1>
+      );
+    }
+    //----
+    //-2)Crear componentes dirigiendo clases
+    class MiComponente extends React.Component{
+        //---Creo un  constructor que va a pasar los valores al metodo render
+        constructor(props){
+            super(props);
+            //Creamos un estado en cero
+            this.state = {
+                            count:0,
+            };
+            //es necesario pisar la función para que el evento pueda usar Micomponente, este debe hacerse siempre en el constructor
+            this.handleClick = this.handleClick.bind(this); 
+        }
+        //--Metodo al hacer click al h1
+        handleClick (){
+          this.setState({
+            count :this.state.count + 1,
+          });
+        }
+        //---
+        //Render es un método obligatorio para cualquier componente
+        render(){
+            const name = this.props.name;
+            return(
+                <h1 id="Title" onClick={this.handleClick}>
+                    hola {name} {this.state.count}
+                </h1>
+            );
+        }
+    }
+    //----
+    //3)Por medio de una función que cree una clase, se va a descartar de React.
+    const OtroComponent = React.createClass({
+      //--De esta forma se inicializa el estado
+        getInitialState(){
+            return{
+                count:0,
+            };
+        },  
+        //CreateClass hace bind de todos los metodos que creemos en nuestar clase
+        handleClick (){
+            this.setState({
+                count :this.state.count + 1,
+            });
+        },
+        render(){
+            const name = this.props.name;
+            return(
+                <h1 id="Title" onClick={this.handleClick}>
+                    hola {name} {this.state.count}
+                </h1>
+            );
+        }
+    });
+    //----
+    ReactDOM.render(
+      //Renderizo la clase MiComponente
+      /*<MiComponente name="Ejemplo de render con clases" />,*/
+      //Renderizo OtroComponent
+      <OtroComponent name="Otro componente :D"/>,
+      document.getElementById('app')
+    );
+
+  </script>
+</body>
+</html>

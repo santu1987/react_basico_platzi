@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <main id="app"></main>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.18.2/babel.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+  <script type="text/babel">
+   //--Ciclo de vida de Componentes
+
+    function Hola(props) {
+      return (
+        <h1 id="Title" onClick={props.onClick} onMouseEnter={props.onMouseEnter}>
+          Hola {props.name} {props.count}
+        </h1>
+      );
+    }
+    //---
+
+    class MiComponente extends React.Component{
+        //--De montado---------------------------------------------
+        //---Creo un  constructor que va a pasar los valores al metodo render
+        constructor(props){
+            super(props);
+            //Creamos un estado en cero
+            this.state = {
+                            count:0,
+            };
+            //es necesario pisar la función para que el evento pueda usar Micomponente, este debe hacerse siempre en el constructor
+            this.handleClick = this.handleClick.bind(this); 
+        }
+        //--Metodo antes de ser montado
+        componentWillMount(){
+          console.log('El componente va a ser montado')
+        }
+        //--Metodo cuando el componente este montado, puedo usra el DOIM
+        componentDidMount() {
+          document.addEventListener('click', this.handleClick)//Con el addEventListener captura todos los click de pagina y ejecuta el metodo handleClick
+        }
+        //------------------------------------------------------
+        //---
+        //--De actualizacion------------------------------------
+        //Ejecuto actualizaciónd e estados si los props cambian
+       /* componentWillReceiveProps(nextProps) {
+          this.setState({
+            count: this.setState.count * 2,
+          })
+        }*/
+        //Metodo que valida si el componente se debe actualizar o no
+        shouldComponentUpdate(nextProps, nextState) {
+          if(nextState.count !== this.state.count) return true;
+          return false;
+        }
+        //--Metodo que ejecuto algo antes de que se actualize
+        componentWillUpdate(nextProps, nextState) {
+          console.log('el componente se va actualizar');
+        }
+        //--Metodo que ejecuta algo cuando el componente se actualize
+        componentDidUpdate(prevProps, prevState) {
+          console.log('El componente se actualizó')
+        }
+        //--------------------------------------------------------
+        //De desmontado
+        //Metodo que ejecuta algo antes de desmontar 
+        componentWillUnmount() {
+          //Ejem: quitar algo si el componente no existe
+          document.removeEventListener('click', this.handleClick)//Con el addEventListener captura todos los click de pagina y ejecuta el metodo handleClick
+        }
+        //--------------------------------------------------------
+        //---
+        //Render es un método obligatorio para cualquier componente
+        render(){
+            return(
+                <Hola
+                    name={this.props.name}
+                    count={this.state.count}
+                    onClick={this.handleClick}
+                    onMouseEnter = {this.handleMouseEnter}
+                />
+            );
+        }
+        //--Metodo al hacer click al h1
+        handleClick (){
+          this.setState({
+            count :this.state.count + 1,
+          });
+        }
+        //--Metodo al hacer mouse over en el componente
+        handleMouseEnter(event){
+          console.log(event.target)
+        }
+    }
+    //----
+    ReactDOM.render(
+      //Renderizo la clase MiComponente
+      <MiComponente name="Ejemplo de render con clases" />,
+      document.getElementById('app')
+    );
+
+  </script>
+</body>
+</html>

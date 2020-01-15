@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <main id="app"></main>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.18.2/babel.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+  <script type="text/babel">
+  //--Creo la función hola
+  function Hola(props,context) {
+      return (
+        <h1 id="Title" onClick={props.onClick}>
+          Hola {props.name} {context.count}
+        </h1>
+      );
+    }
+   //--
+  function Counter(WrappedComponent){
+    class CounterHOC extends React.Component{
+      //--Creamos el constructor
+      constructor(props){
+        super(props);
+        this.state = {
+          count:0,
+        };
+        this.handleClick = this.handleClick.bind(this)
+      }
+      //--Metodo para devolver los datos que deben ser accesibles a todos los métodos de la aplicación.
+      getChildContext(){
+            return{
+              count: this.state.count,
+            };
+        }
+      //--Metodo al hacer click al h1
+      handleClick (){
+          this.setState({
+            count :this.state.count + 1,
+          });
+       }
+      //--- 
+      render(){
+        return(
+          <WrappedComponent
+            onClick={this.handleClick} 
+            {...this.props}
+          />
+        )//Con ... se especifica que se descomponga y se asigna al WrappedComponent
+      }
+    }
+    //-----
+    CounterHOC.childContextTypes = {
+        count: React.PropTypes.number,
+    }
+    return CounterHOC;
+    //-----
+  } 
+
+
+    //--Creo una constante para el componente de alto orden
+    const HolaHOC = Counter(Hola);
+    //Mantiene estado del contador y mandar por props el onclick....
+
+    //--- Defino que el contexto es un numero
+    Hola.contextTypes = {
+      count: React.PropTypes.number
+    }
+    ReactDOM.render(
+      //Renderizo la clase MiComponente
+      <HolaHOC name="Ejemplo componentes de alto orden" />,
+      document.getElementById('app')
+    );
+
+  </script>
+</body>
+</html>

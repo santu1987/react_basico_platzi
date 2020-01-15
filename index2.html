@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>hola Mundo</title>
+</head>
+<body>
+	<main id="app"></main>
+	<!--Bloque de js -->
+	<!--Llamdos al cdn de react -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.js"></script>
+	<script>
+		function Hola(props){
+			var name = props.name;//Los valores que recibe
+
+			return React.DOM.h1({
+				id: 'Title',
+			}, 'Hola ' + name);
+		}
+
+		var hola = React.createElement(Hola,{
+			name:'Platzi',
+		});// Instancio a Hola pasandole los valores a asignar
+
+		ReactDOM.render(
+			hola,
+			document.getElementById('app')
+		);//LE digo que renderize el componente hola dentro de app
+	//--
+	//EcmaScript 2015---->
+	setTimeout(
+		function(){
+			//--Instancio de nuevo el componente, creo el elemento y coloco el document.getElementById
+			ReactDOM.render(
+				React.createElement(Hola, {name:'Ha cambiado el texto!'}),
+				document.getElementById('app')
+			)
+		},1000)
+	//--	
+	</script>
+	<!-- -->
+</body>
+</html>   
